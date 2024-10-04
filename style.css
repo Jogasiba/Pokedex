@@ -30,7 +30,7 @@ header input{
 }
 
 body{
-    background-image: url("/img/bg.png");
+    background-image: url("img/bg.png");
     background-size: cover;
     background-attachment: fixed;
 }
