@@ -1,4 +1,11 @@
-function start(){
+async function start(){
+    var header = document.getElementById('header')
+
+    for(i = 1; i <= 18; i++){
+        header.innerHTML += `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/${i}.png"
+                             id="imgHeaderType" onclick="buscarTipo(${i})">`
+    }
+
     var ultimo = 0
     buscarTodos(ultimo)
 }
@@ -163,13 +170,6 @@ async function verAntes(url, ultimo){
                         </a>`;
 }
 
-document.getElementById('pesquisaInput').addEventListener('keydown', function(event) {
-    if(event.key == 'Enter'){
-        pesquisarPokemon();
-    }
-    
-  });
-
 async function pesquisarPokemon(){
 
     var input = document.getElementById('pesquisaInput')
@@ -178,49 +178,96 @@ async function pesquisarPokemon(){
     if(nomeId == ''){
         buscarTodos(0);
     } else{
+        console.log('adwk')
         var urlAPI = `https://pokeapi.co/api/v2/pokemon/${nomeId.toLowerCase()}`;
+        var res = await fetch(urlAPI).then(resposta => {return resposta.json()});
+
+        var cards = document.getElementById('cards');
+
+        var card = '';
+        cards.innerHTML = '<h1 id="msgLoad">CARREGANDO! AGUARDE!</h1>';
+
+        card += `<div class="col-lg-4">
+                    <div class="card mt-3">
+                        <h2>${res.id}</h2>
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${res.id}.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                        <h2 class="card-title">${res.forms[0].name.toUpperCase()}</h2>
+                        <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                        </div>
+                        <h3 class="hp">HP ${res.stats[0].base_stat}</h3>`
+                        for(i2 = 0; i2 < res.types.length; i2++){
+                            var link = res.types[i2].type.url
+                            var res2 = await fetch(link).then(resposta => {return resposta.json()});
+                            var id = res2.id
+                            card += `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/${id}.png" id="imgType">`
+                        }
+                        card += `<form>
+                                    <h5>Attack</h5>
+                                    <progress value="${res.stats[1].base_stat}" max="100"></progress>
+                                    <h6>${res.stats[1].base_stat}</h6><br>
+
+                                    <h5>Defense</h5>
+                                    <progress value="${res.stats[2].base_stat}" max="100"></progress>
+                                    <h6>${res.stats[2].base_stat}</h6><br>
+
+                                    <h5>Speed</h5>
+                                    <progress value="${res.stats[5].base_stat}" max="100"></progress>
+                                    <h6>${res.stats[5].base_stat}</h6><br>
+                                </form>
+                        </div>
+                    </div>
+                </div>`
+            
+        cards.innerHTML = card;
+    }  
+}
+
+async function buscarTipo(tipo){
+    var urlAPI = `https://pokeapi.co/api/v2/type/${tipo}`;
     var res = await fetch(urlAPI).then(resposta => {return resposta.json()});
 
     var cards = document.getElementById('cards');
 
     var card = '';
     cards.innerHTML = '<h1 id="msgLoad">CARREGANDO! AGUARDE!</h1>';
-
-    card += `<div class="col-lg-4">
+    for(i = 0; i < res.pokemon.length; i++){
+        var res1 = await fetch('https://pokeapi.co/api/v2/pokemon/' + res.pokemon[i].pokemon.name).then(resposta => {return resposta.json()});
+        card += `<div class="col-lg-4">
                 <div class="card mt-3">
-                    <h2>${res.id}</h2>
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${res.id}.png" class="card-img-top" alt="...">
+                    <h2>${res1.id}</h2>
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${res1.id}.png" class="card-img-top" alt="...">
                     <div class="card-body">
-                      <h2 class="card-title">${res.forms[0].name.toUpperCase()}</h2>
+                      <h2 class="card-title">${res.pokemon[i].pokemon.name.toUpperCase()}</h2>
                       <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                         <div class="progress-bar bg-success" style="width: 100%"></div>
-                      </div>
-                    <h3 class="hp">HP ${res.stats[0].base_stat}</h3>`
-                    for(i2 = 0; i2 < res.types.length; i2++){
-                        var link = res.types[i2].type.url
+                      </div>`
+                    
+                    card += `<h3 class="hp">HP ${res1.stats[0].base_stat}</h3>`
+                    for(i2 = 0; i2 < res1.types.length; i2++){
+                        var link = res1.types[i2].type.url
                         var res2 = await fetch(link).then(resposta => {return resposta.json()});
                         var id = res2.id
                         card += `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/${id}.png" id="imgType">`
                     }
                     card += `<form>
                                 <h5>Attack</h5>
-                                <progress value="${res.stats[1].base_stat}" max="100"></progress>
-                                <h6>${res.stats[1].base_stat}</h6><br>
+                                <progress value="${res1.stats[1].base_stat}" max="100"></progress>
+                                <h6>${res1.stats[1].base_stat}</h6><br>
 
                                 <h5>Defense</h5>
-                                <progress value="${res.stats[2].base_stat}" max="100"></progress>
-                                <h6>${res.stats[2].base_stat}</h6><br>
+                                <progress value="${res1.stats[2].base_stat}" max="100"></progress>
+                                <h6>${res1.stats[2].base_stat}</h6><br>
 
                                 <h5>Speed</h5>
-                                <progress value="${res.stats[5].base_stat}" max="100"></progress>
-                                <h6>${res.stats[5].base_stat}</h6><br>
+                                <progress value="${res1.stats[5].base_stat}" max="100"></progress>
+                                <h6>${res1.stats[5].base_stat}</h6><br>
                             </form>
                     </div>
                   </div>
             </div>`
-        
-    cards.innerHTML = card;
     }
 
-    
+    cards.innerHTML = card;
 }
