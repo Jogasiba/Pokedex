@@ -21,7 +21,7 @@ header img:hover{
 }
 
 #imgHeaderType{
-    width: 10%;
+    width: 15%;
 }
 
 header input{
@@ -107,6 +107,8 @@ form h6{
 #msgLoad{
     font-size: 50px;
     color: white;
+    backdrop-filter: blur(200px);
+    width: 100%;
 }
 
 h2{
@@ -115,7 +117,7 @@ h2{
 
 .card{
     background-color: transparent;
-    backdrop-filter: blur(200px);
+    backdrop-filter: blur(100px);
     border: 5px solid white;
     color: white;
 }
@@ -134,4 +136,19 @@ footer{
 
 footer h3{
     font-size: 35px;
+}
+
+.card-img-top{
+    width: 50%;
+    margin-left: 25%;
+}
+
+@media screen and (max-width: 990px) {
+    #imgHeaderType{
+        width: 30%;
+    }
+
+    header button{
+        font-size: 15px;
+    }
 }

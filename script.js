@@ -178,7 +178,6 @@ async function pesquisarPokemon(){
     if(nomeId == ''){
         buscarTodos(0);
     } else{
-        console.log('adwk')
         var urlAPI = `https://pokeapi.co/api/v2/pokemon/${nomeId.toLowerCase()}`;
         var res = await fetch(urlAPI).then(resposta => {return resposta.json()});
 
