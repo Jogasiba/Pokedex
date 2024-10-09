@@ -151,4 +151,8 @@ footer h3{
     header button{
         font-size: 15px;
     }
+
+    header input{
+        font-size: 15px;
+    }
 }
