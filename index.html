@@ -12,7 +12,38 @@
     <header id="header">
         </a><img src="img/logo.png" onclick="buscarTodos(0)"><br>
         <input type="text" placeholder="Digite o Nome ou Número da Pokedex!" id="pesquisaInput">
-        <button onclick="pesquisarPokemon()"><ion-icon name="search"></ion-icon></button><br><br>
+        <button onclick="pesquisarPokemon()"><ion-icon name="search"></ion-icon></button><br>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="btn-logs" onclick="exibirLogs()">
+          Ver Logs
+        </button>
+        
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Histórico de Logs</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <table border="1">
+                  <thead>
+                      <tr>
+                          <th>Id</th>
+                          <th>Data</th>
+                          <th>API</th>
+                          <th>Metodo</th>
+                          <th>Resultado</th>
+                      </tr>
+                  </thead>
+                  <tbody id="tabela">
+                      
+                  </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div><br>
     </header>
     <div class="container">
         <div class="row" id="cards"></div>

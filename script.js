@@ -112,6 +112,7 @@ async function verMais(url, ultimo){
                             }
                             cards.innerHTML += `<button id="btn-card" onclick="verMais('${url2}', ${ultimo})">Próximo!</button>
                         </a>`;
+    inserirLog('Mudando de Página', 'Próxima')
 }
 
 async function verAntes(url, ultimo){
@@ -168,6 +169,7 @@ async function verAntes(url, ultimo){
                             }
                             cards.innerHTML += `<button id="btn-card" onclick="verMais('${url2}', ${ultimo})">Próximo!</button>
                         </a>`;
+    inserirLog('Mudando de Página', 'Anterior')
 }
 
 async function pesquisarPokemon(){
@@ -220,6 +222,7 @@ async function pesquisarPokemon(){
                 </div>`
             
         cards.innerHTML = card;
+        inserirLog('Buscar Pokemon', res.forms[0].name.toUpperCase())
     }  
 }
 
@@ -269,4 +272,31 @@ async function buscarTipo(tipo){
     }
 
     cards.innerHTML = card;
+    inserirLog('Buscar por Tipo', res.pokemon.length)
+}
+
+async function inserirLog(metodo, resultado){
+    await fetch(`https://www.piway.com.br/unoesc/api/inserir/log/328401/PokeAPI/${metodo}/${resultado}`).then(resposta => {return resposta.json()});
+}
+
+async function ExcluirLog(id){
+    await fetch(`https://www.piway.com.br/unoesc/api/excluir/log/${id}/aluno/328401`).then(resposta => {return resposta.json()});
+    exibirLogs()
+}
+
+async function exibirLogs(){
+    var res = await fetch(`https://www.piway.com.br/unoesc/api/logs/328401`).then(resposta => {return resposta.json()});
+    var modal = document.getElementById('tabela')
+
+    modal.innerHTML = ''
+    for(i = 0; i < res.length; i++){
+        modal.innerHTML += `<tr class="tr-table">
+                          <td>${res[i].idlog}</td>
+                          <td>${res[i].log}</td>
+                          <td>${res[i].api}</td>
+                          <td>${res[i].metodo}</td>
+                          <td>${res[i].resultado}</td>
+                          <td><button id="btn-table" onclick="ExcluirLog(${res[i].idlog})">Excluir</button></td>
+                      </tr>`
+    }
 }
